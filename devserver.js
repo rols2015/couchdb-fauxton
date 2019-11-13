@@ -5,13 +5,23 @@ const WebpackDev = require('webpack-dev-server');
 const config = require('./webpack.config.dev.js');
 const httpProxy = require('http-proxy');
 const path = require('path');
-require('dotenv').config();
+if (process.argv.length !== 3) {
+  console.error('Expected at to have one argument!');
+  process.exit(1);
+} else {
+  process.env.COUCH_HOST = process.argv.slice(2).toString();
+  console.log(`COUCH_HOST is set to ${process.env.COUCH_HOST}`);
+}
+
+
 
 const loadSettings = function () {
   let fileName = './settings.json.default.json';
   if (fs.existsSync('./settings.json')) {
     fileName = './settings.json';
   }
+
+
 
   return require(fileName).couchserver || {
     port: process.env.FAUXTON_PORT || 8000,
