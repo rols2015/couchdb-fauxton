@@ -5,7 +5,7 @@ const WebpackDev = require('webpack-dev-server');
 const config = require('./webpack.config.dev.js');
 const httpProxy = require('http-proxy');
 const path = require('path');
-
+require('dotenv').config();
 
 const loadSettings = function () {
   let fileName = './settings.json.default.json';
@@ -79,7 +79,7 @@ const runWebpackServer = function () {
   });
 
   proxy.on('proxyReq', function(proxyReq, req) {
-    if (req.headers.cookie.includes('isApiKey=Y')) {
+    if (req.headers.cookie && req.headers.cookie.includes('isApiKey=Y')) {
       proxyReq.setHeader('Authorization', `Bearer ${global.iamToken}`);
     }
 
